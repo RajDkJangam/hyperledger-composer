@@ -1,0 +1,36 @@
+{
+    "auctioneer": {
+        "$class": "oxchains.auction.model.private.Auctioneer",
+        "aid": "aid:1",
+        "name": "Judge"
+    },
+    "member": [
+        {
+            "$class": "oxchains.auction.model.public.Member",
+            "mid": "mid:1",
+            "balance": 1500,
+            "name": "Alice"
+        },
+        {
+            "$class": "oxchains.auction.model.public.Member",
+            "mid": "mid:2",
+            "balance": 3000,
+            "name": "Bob"
+        },
+        {
+            "$class": "oxchains.auction.model.public.Member",
+            "mid": "mid:3",
+            "balance": 1500,
+            "name": "Cathy"
+        }
+    ],
+    "vehicle": {
+        "$class": "oxchains.auction.model.public.Vehicle",
+        "vid": "vid:1",
+        "brand": "Ford",
+        "since": 2016,
+        "price": 300,
+        "state": "OPEN",
+        "owner": "resource:oxchains.auction.model.public.Member#mid:3"
+    }
+}

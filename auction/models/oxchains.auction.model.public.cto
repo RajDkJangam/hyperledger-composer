@@ -1,0 +1,39 @@
+namespace oxchains.auction.model.public
+
+concept User {
+  o String name
+}
+
+asset Vehicle identified by vid {
+  o String vid
+  o String brand
+  o Integer since default=2016 range=[2006,]
+  o Double price default=100.0 range=[0.0,]
+  o Double offer range=[1.0,] optional
+  o BIDSTATE state
+  --> Member owner
+  --> Member bidder optional
+}
+
+enum BIDSTATE {
+  o OPEN
+  o CLOSE
+}
+
+participant Member identified by mid extends User {
+  o String mid
+  o Double balance default=0.0 range=[0.0,]
+}
+
+transaction Offer {
+  --> Vehicle vehicle
+  o Double offer range=[0.0,]
+}
+
+transaction CloseBidding {
+  --> Vehicle vehicle
+}
+
+event BidCloseEvent {
+  --> Vehicle vehicle
+}

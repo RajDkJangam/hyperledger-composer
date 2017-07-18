@@ -1,0 +1,7 @@
+namespace oxchains.auction.model.private
+
+import oxchains.auction.model.public.User
+
+participant Auctioneer identified by aid extends User{
+  o String aid
+}
