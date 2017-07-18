@@ -1,0 +1,6 @@
+query memberStagingBidding{
+  description: "select all open bidding of a member"
+  statement:
+    SELECT oxchains.auction.model.public.Vehicle
+      WHERE ((owner == _$owner) AND (state == "STAGING"))
+}

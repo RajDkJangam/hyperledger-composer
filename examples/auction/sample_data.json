@@ -1,36 +1,50 @@
 {
-    "auctioneer": {
-        "$class": "oxchains.auction.model.private.Auctioneer",
-        "aid": "aid:1",
-        "name": "Judge"
+  "auctioneer": {
+    "$class": "oxchains.auction.model.private.Auctioneer",
+    "aid": "aid:1",
+    "name": "Judge"
+  },
+  "member": [
+    {
+      "$class": "oxchains.auction.model.public.Member",
+      "mid": "mid:1",
+      "balance": 1500,
+      "name": "Alice"
     },
-    "member": [
-        {
-            "$class": "oxchains.auction.model.public.Member",
-            "mid": "mid:1",
-            "balance": 1500,
-            "name": "Alice"
-        },
-        {
-            "$class": "oxchains.auction.model.public.Member",
-            "mid": "mid:2",
-            "balance": 3000,
-            "name": "Bob"
-        },
-        {
-            "$class": "oxchains.auction.model.public.Member",
-            "mid": "mid:3",
-            "balance": 1500,
-            "name": "Cathy"
-        }
-    ],
-    "vehicle": {
-        "$class": "oxchains.auction.model.public.Vehicle",
-        "vid": "vid:1",
-        "brand": "Ford",
-        "since": 2016,
-        "price": 300,
-        "state": "OPEN",
-        "owner": "resource:oxchains.auction.model.public.Member#mid:3"
+    {
+      "$class": "oxchains.auction.model.public.Member",
+      "mid": "mid:2",
+      "balance": 3000,
+      "name": "Bob"
+    },
+    {
+      "$class": "oxchains.auction.model.public.Member",
+      "mid": "mid:3",
+      "balance": 1500,
+      "name": "Cathy"
     }
+  ],
+  "vehicle": {
+    "$class": "oxchains.auction.model.public.Vehicle",
+    "vid": "vid:1",
+    "brand": "Ford",
+    "since": 2016,
+    "price": 300,
+    "state": "OPEN",
+    "owner": "resource:oxchains.auction.model.public.Member#mid:3"
+  },
+  "postbidding": {
+    "$class": "oxchains.auction.model.public.PostBidding",
+    "vehicle": {
+      "$class": "oxchains.auction.model.public.Vehicle",
+      "vid": "vid:2",
+      "brand": "VW",
+      "since": 2016,
+      "price": 100,
+      "state": "STAGING",
+      "owner": "resource:oxchains.auction.model.public.Member#mid:1"
+    },
+    "transactionId": "ebbfb75e-8ad5-419a-a223-5fec457a87e4",
+    "timestamp": "2017-07-18T05:18:58.293Z"
+  }
 }

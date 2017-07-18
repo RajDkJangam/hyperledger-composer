@@ -9,13 +9,14 @@ asset Vehicle identified by vid {
   o String brand
   o Integer since default=2016 range=[2006,]
   o Double price default=100.0 range=[0.0,]
-  o Double offer range=[1.0,] optional
-  o BIDSTATE state
+  o BIDSTATE state default="STAGING"
   --> Member owner
+  o Double offer range=[1.0,] optional
   --> Member bidder optional
 }
 
 enum BIDSTATE {
+  o STAGING
   o OPEN
   o CLOSE
 }
@@ -34,6 +35,22 @@ transaction CloseBidding {
   --> Vehicle vehicle
 }
 
+transaction PostBidding {
+  o Vehicle vehicle
+}
+
+transaction OpenBidding {
+  --> Vehicle vehicle
+}
+
+transaction RecallBidding {
+}
+
+event BidOpenEvent {
+  --> Vehicle vehicle
+}
+
 event BidCloseEvent {
   --> Vehicle vehicle
 }
+

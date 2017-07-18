@@ -1,4 +1,22 @@
-rule MemberReadRule {
+rule MemberReadAssetRule {
+  description: "members can only see vehicles open for bidding or of themselves"
+  participant(m): "oxchains.auction.model.public.Member"
+  operation: READ
+  resource(v): "oxchains.auction.model.public.Vehicle"
+  condition: (v.state == "STAGING" && v.owner.getIdentifier() != m.getIdentifier())
+  action: DENY
+}
+
+rule MemberReadPostBiddingRule{
+  description: "members can only see vehicles open for bidding or of themselves"
+  participant(m): "oxchains.auction.model.public.Member"
+  operation: READ
+  resource(tx): "oxchains.auction.model.public.PostBidding"
+  condition: (tx.vehicle.state == "STAGING" && tx.vehicle.owner.getIdentifier() != m.getIdentifier())
+  action: DENY
+}
+
+rule MemberReadPublicInfoRule {
   description: "members can view public info"
   participant: "oxchains.auction.model.public.Member"
   operation: READ
@@ -6,11 +24,65 @@ rule MemberReadRule {
   action: ALLOW
 }
 
-rule AuctioneerGeneralRule {
+rule AuctioneerReadRule {
   description: "only auctioneer can post listing"
   participant: "oxchains.auction.model.private.Auctioneer"
   operation: READ
   resource: "oxchains.auction.model.public.*"
+  action: ALLOW
+}
+
+rule PostBiddingRule {
+  description: "members can post assets for bidding"
+  participant: "oxchains.auction.model.public.Member"
+  operation: CREATE
+  resource: "oxchains.auction.model.public.PostBidding"
+  action: ALLOW
+}
+
+rule PostBiddingVehicleRule {
+  description: "members can post assets for bidding by adding a vehicle"
+  participant(m): "oxchains.auction.model.public.Member"
+  operation: CREATE
+  resource(v): "oxchains.auction.model.public.Vehicle"
+  transaction(tx): "oxchains.auction.model.public.PostBidding"
+  condition: (m.getIdentifier() == v.owner.getIdentifier() && v.getIdentifier() == tx.vehicle.getIdentifier())
+  action: ALLOW
+}
+
+rule RecallBiddingRule {
+  description: "members can recall staging bidding"
+  participant: "oxchains.auction.model.public.Member"
+  operation: CREATE
+  resource: "oxchains.auction.model.public.RecallBidding"
+  action: ALLOW
+}
+
+rule RecallBiddingVehicleRule {
+  description: "members can recall staging bidding"
+  participant(m): "oxchains.auction.model.public.Member"
+  operation: DELETE
+  resource(v): "oxchains.auction.model.public.Vehicle"
+  transaction: "oxchains.auction.model.public.RecallBidding"
+  condition: (m.getIdentifier() == v.owner.getIdentifier())
+  action: ALLOW
+}
+
+rule OpenBiddingRule {
+  description: "auctioneer can open a bidding"
+  participant: "oxchains.auction.model.private.Auctioneer"
+  operation: CREATE
+  resource: "oxchains.auction.model.public.OpenBidding"
+  action: ALLOW
+}
+
+rule OpenBiddingVehicleRule {
+  description: "auctioneer can update vehicle's state before open bidding"
+  participant: "oxchains.auction.model.private.Auctioneer"
+  operation: UPDATE
+  resource(v): "oxchains.auction.model.public.Vehicle"
+  transaction(tx): "oxchains.auction.model.public.OpenBidding"
+  condition: (tx.vehicle.getIdentifier() == v.getIdentifier() && v.state == "STAGING")
   action: ALLOW
 }
 
@@ -20,12 +92,12 @@ rule OfferBiddingRule {
   operation: UPDATE
   resource(v): "oxchains.auction.model.public.Vehicle"
   transaction(tx): "oxchains.auction.model.public.Offer"
-  condition: (v.state == "OPEN" && v.price < tx.offer && tx.offer > (v.offer || 0) && v.owner.getIdentifier() != m.getIdentifer() && (!v.bidder || m.getIdentifier() != v.bidder.getIdentifier()))
+  condition: (v.state == "OPEN" && v.price < tx.offer && tx.offer > (v.offer || 0) && v.owner.getIdentifier() != m.getIdentifier() && (!v.bidder || m.getIdentifier() != v.bidder.getIdentifier()))
   action: ALLOW
 }
 
 rule MakeOfferRule {
-  description: "Description of the Conditional ACL rule"
+  description: "members can make offer to bidding"
   participant: "oxchains.auction.model.public.Member"
   operation: CREATE
   resource: "oxchains.auction.model.public.Offer"
@@ -43,7 +115,7 @@ rule CloseBiddingRule {
 rule CloseBiddingVehicleRule {
   description: "auctioneer can close the bidding of a vehicle only when legally offered"
   participant: "oxchains.auction.model.private.Auctioneer"
-  operation: ALL
+  operation: READ, UPDATE
   resource(v): "oxchains.auction.model.public.Vehicle"
   transaction: "oxchains.auction.model.public.CloseBidding"
   condition: (v.state == "OPEN" && v.price <= (v.offer || 0) && !!v.bidder)
@@ -53,7 +125,7 @@ rule CloseBiddingVehicleRule {
 rule CloseBiddingMemberRule {
   description: "auctioneer can help transfer the vehicle to the latest bidder when closing bidding"
   participant: "oxchains.auction.model.private.Auctioneer"
-  operation: ALL
+  operation: READ, UPDATE
   resource(m): "oxchains.auction.model.public.Member"
   transaction(t): "oxchains.auction.model.public.CloseBidding"
   condition: (t.vehicle.state == "OPEN" && t.vehicle.price <= t.vehicle.offer && (t.vehicle.bidder.getIdentifier() == m.getIdentifier() || t.vehicle.owner.getIdentifier() == m.getIdentifier() ))
