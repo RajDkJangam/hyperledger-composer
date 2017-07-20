@@ -1,0 +1,65 @@
+namespace oxchains.invoice
+
+participant Entity identified by id {
+  o String id
+  o String name
+  o String phone
+  o Long balance
+  --> Company company optional
+}
+
+participant Company identified by tin {
+  /* tax identitier number */
+  o String tin
+  o String address
+  --> Entity entity
+}
+
+enum ReimbursementState {
+  o OPEN
+  o STAGING
+  o CLOSE
+}
+
+concept ProductListing {
+  o String name
+  o String description
+  o Integer price
+  o Integer quantity
+}
+
+asset Invoice identified by eid {
+  o String eid
+  --> Entity title 
+  --> Company by
+  --> Entity owner
+  o ProductListing[] productListings
+  o ReimbursementState reimbursementState
+}
+
+transaction PayProductListing {
+  --> Entity buyer
+  --> Company seller
+  --> Entity invoiceTitle
+  o ProductListing[] productListings
+}
+
+transaction InvoiceTransfer {
+  --> Entity to
+  --> Invoice[] invoices
+}
+
+transaction Reimbursement {
+  --> Invoice[] invoices
+}
+
+transaction AcceptReimbursement {
+  --> Entity by
+  --> Invoice[] invoices
+}
+
+transaction DenyReimbursement {
+  --> Entity by
+  --> Invoice[] invoices
+  o String reason optional
+}

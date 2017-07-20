@@ -1,0 +1,40 @@
+rule PayProductListingForbidRule {
+  description: "cannot buy from oneself, seller and title cannot be the same entity"
+  participant: "ANY"
+  operation: CREATE
+  resource(tx): "oxchains.invoice.PayProductListing"
+  condition: (
+    tx.buyer.getIdentifier() == tx.seller.entity.getIdentifier()
+    || tx.seller.getIdentifier() == tx.invoiceTitle.getIdentifier()
+  )
+  action: DENY
+}
+
+rule InvoiceTransferForbidRule {
+  description: "cannot transfer invoice to oneself, cannot transfer staging invoices, cannot transfer others' invoices"
+  participant(m): "ANY"
+  operation: CREATE
+  resource(tx): "oxchains.invoice.InvoiceTransfer"
+  condition: (!(
+    (!!m.entity && m.entity.getIdentifier() == tx.to.getIdentifier())
+    || m.getIdentifier() == tx.to.getIdentifier()
+    || tx.invoices.some(function(i){return i.reimbursementState == "STAGING";})
+    || (
+        !!m.entity && tx.invoices.some(function(i){return i.owner.getIdentifier() != m.entity.getIdentifier();})
+        || tx.invoices.some(function(i){return i.owner.getIdentifier() != m.getIdentifier();})
+       )
+  ))
+  action: ALLOW
+}
+
+rule InvoiceReimburseForbidRule {
+  description: "Description of the Transactional ACL rule"
+  participant: "ANY"
+  operation: CREATE
+  resource(tx): "oxchains.invoice.Reimbursement"
+  condition: (!(
+    !!m.entity && tx.invoices.some(function(i){return i.owner.getIdentifier() != m.entity.getIdentifier();})
+    || tx.invoices.some(function(i){return i.owner.getIdentifier() != m.getIdentifier();})
+  ))
+  action: ALLOW
+}
