@@ -1,0 +1,139 @@
+namespace tc.cfr.spp
+
+participant SalesCenter identified by scId extends Group {
+  o String scId
+}
+
+concept EntityDisclosure{
+  o String firstName
+  o String lastName
+  o String companyName optional
+}
+
+concept Entity extends EntityDisclosure{
+  o String address
+  o String email
+  o String city
+  o String state
+  o String zip
+  o String country
+  o String phone
+  o Double depositBalance
+}
+
+participant Individual identified by ssn extends Entity{
+  /* Tax Identification Number for an individual is defined as Social Security Number (SSN) (Public Law 104-134) */
+  o String ssn
+  o DateTime dateOfBirth
+}
+
+participant Company identified by tin extends Entity{
+  /* Tax Identification Number (Public Law 104-134) */
+  o String tin
+}
+
+participant HoldingAgency identified by haId {
+  o String haId
+}
+
+/* Federal agency has first claim to personal property  */
+participant FederalAgency identified by faId {
+  o String faId
+}
+
+enum SaleMethod {
+  o SEALED_BID
+  o SPOT_BID
+  o AUCTION
+}
+
+enum PaymentMethod {
+  o Credit
+  o Currency
+}
+
+enum BidType {
+  o FLAT
+  o PROXY
+}
+
+/**
+ * categories reference: https://gsaauctions.gov
+ */
+enum PropertyCategory {
+  o AGRICULTURAL_EQUIPMENT
+  o AGRICULTURAL_SUPPLIES
+  o BOATS
+  o CUMMUNICATION_EQUIPMENT
+  o COMPUTER_EQUIPMENTS
+  o COMPUTER_ACCESSORIES
+  o CONSTRUCTION_EQUIPMENT
+  o ELECTRICAL_ELECTRONICAL_EQUIPMENT
+  o ELECTRICAL_ELECTRONICAL_COMPONENTS
+  o FIRE_TRUCKS_FIRE_FIGHTING_EQUIPMENT
+  o FURNITURE
+  o HAND_TOOLS
+  o SHOP_EQUIPMENT
+  o HOUSEHOLD
+  o INDUSTRIAL_MACHINERY
+  o ARTIFACTS_COLLECTIBLES
+  o LAB_EQUIPMENT
+  o MEDICAL_EQUIPMENT
+  o DENTAL_EQUIPMENT
+  o VETERINARY_EQUIPMENT
+  o MISCELLANEOUS
+  o MOTORCYCLES
+  o BICYCLES
+  o OFFICE_EQUIPMENT
+  o OFFICE_SUPPLIES
+  o PHOTOGRAPHIC_EQUIPMENT
+  o TRAILERS
+  o TRACTORS
+  o MANUFACTURED_HOUSING
+  o VEHICLES
+}
+
+concept OfferToSell {
+  o DateTime saleDateTime
+  o SaleMethod saleMethod
+  o DateTime startOfRecevingBidDateTime
+  o DateTime endOfRecevingBidDateTime
+  o String termsConditions
+  --> Property propertyForSale
+}
+
+asset Property identified by pId {
+  o String pId
+  o String description
+  --> HoldingAgency holdingAgency
+}
+
+asset BidItem identified by itemId{
+  o String itemId
+  o Integer reservePrice
+  o Integer minimumIncrement
+  --> Property property
+}
+
+transaction Bid {
+  o Integer amount
+  o BidType bidType
+  o Integer maximum optional
+  --> Individual individual optional
+  --> Company company optional
+}
+
+/**
+ * all bidders must confirm inspection or waive the opportunity for inspection before bid starts
+ */
+transaction Inspection {
+  --> BidItem bidItem
+  --> Individual individual optional
+  --> Company company optional
+}
+
+transaction BidDisclosure {
+  /* only include bidder's name */
+  o Integer amount
+  o EntityDisclosure entity
+}

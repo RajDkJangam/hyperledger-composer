@@ -1,0 +1,29 @@
+# Payment & Removal
+
+## Payment and Removal Timeframes
+
+If you are the successful bidder, property must be paid for within 2 business days and property removed within 10 business days from the time and date of the award e-mail notification of sale results, unless otherwise specified in the contract. After payment is processed, a copy of the Purchaser's Receipt and Authority to Release Property will be e-mailed, faxed or mailed to the successful bidder based upon the information that was provided at the time of registration.
+
+Note: GSA Auctions℠ may delay removal on an item if they find it necessary to validate payment or to identity the removing agent by the winning bidder. In some cases the credit card used to make an online payment may need to be verified and or a notarized power of attorney may be required.
+
+## Withdrawal of Property After Award
+
+The Government reserves the right to withdraw for its use any or all of the property covered by this contract, if a bona fide requirement for the property develops or exists up to the time of the Government's acceptance of the high bid of the property. In the event of a withdrawal under this condition, the Government shall be liable only for the refund of the contract price of the withdrawn property or such portion of the contract price as it may have received.
+
+## Forms of Payment
+
+Payment is restricted to the following instruments: U.S. currency (no greater than $10,000); bank cashier's check; credit union cashier's check issued by a Federal or State chartered Credit Union; U.S. Postal Service or commercial money order; travelers' checks; official checks; properly endorsed United States Federal, State, or local government checks; MasterCard, VISA, Discover (Novus), American Express, processed manually or online through the Department of Treasury's electronic payment service via GSA Auctions℠ bidder's summary page; If you are making payment via EFT/Wire Transfers, please contact the regional Sales office responsible for a specific item to make arrangements. Certified checks, bank drafts and debit cards with dollar limitations and/or requiring a PIN number are not acceptable.
+
+Online payments are processed through the Department of Treasury's electronic payment service via GSA Auctions℠, which is a secure government-wide payment collection portal and transaction engine created and managed by the U.S. Department of the Treasury's Financial Management Service (FMS) Bureau of Fiscal Service (BFS). By Treasury policy effective June 1, 2015, credit card payments are restricted to a $24,999.99 dollar limit and no more than two cards per transaction.
+
+If you are making payment in U.S. currency, please contact the regional Sales office responsible for a specific item to make arrangements. Some of our regional offices are not equipped to accept cash and other walk-in payments. A personal or company check will be accepted only when accompanied by a bank letter guaranteeing payment. This letter must be on bank letterhead and must state (1) that payment is guaranteed; (2) that the guarantee is valid for 30 days after the date of the award email notification; and (3) that the guarantee covers the purchase of U.S. Government personal property only. The letter must be dated, include the purchaser's name, the amount the guarantee is for, date of sale, sale and lot number, and be signed by a bank official authorized to guarantee payment. All sales are final.
+
+## Property of Federal Government
+
+Please be advised that title does not transfer for property of the Federal Government until such time as the property is removed from federal premises. If the property is located on local government or private property, it is still considered Federally-owned property until such time as it is removed.
+
+## Removal
+
+Property must be removed within 10 business days from the date and time of award e-mail notification. An e-signature Purchaser's Receipt and Authority to Release Property must be presented prior to removal of property to verify proof of purchase; otherwise removal will not be permitted. In addition, if successful bidder appoints/designates another person or agent to remove property on his/her behalf, the successful bidder must provide the person or agent assigned, authorization allowing them to remove the subject property. Successful bidders are required to call and make for an appointment prior to inspection and/or removal to the property. Bidders are responsible to pay close attention to the requirements listed on the item description page. Property custodians phone numbers are listed by the property description in the auction site. The authorization for third party removals must include: (1) the name of the person the successful bidder is authorizing to remove the property; (2) the sale and lot number of the item(s); and (3) must be signed by the successful bidder. In addition to the letter of authorization, the person picking up the property must present a photo id, and a Purchaser's Receipt and Authority to Release Property signed by the successful bidder to verify proof of purchase prior to removal, otherwise removal will not be permitted.
+
+Successful bidders are cautioned that they are responsible for packing, loading and removal of any and all property awarded to them from the exact place where the property is located, as indicated on the item description page for each item that they purchase on the gsaauctions.gov website. The purchaser will make all arrangements and perform all work necessary to effect removal of the property, to include packing, loading and transportation of the property. Federal employees cannot suggest shipping and/or packaging companies.

@@ -70,7 +70,7 @@ We exclude negotiated sales (41 CFR 102-38.100 through 102-38.125) from our mode
   - spot bid sale: sale, bid and award on the spot (41 CFR 102-38.90)
   - auction (41 CFR 102-38.95)
   - advertisement must be made far enough in advance of the sale (41 CFR 102-38.135), advertisement must include information necessary for potential buyers to participate, such as Date, time and location, general categories, inspection period, method of sale, selling agency and who to contact for additional information (41 CFR 102-38.140)
-  - offer to sell is a notice for the sale of personal property, including sale date and time, method of sale, description of property, selling agency, locatio of property, time and place for receipt of bids, acceptable forms of bid deposits and payments, and terms and conditions (41 CFR 102-38.165) , but when to publish the notice? how?
+  - offer to sell is a notice for the sale of personal property, including sale date and time, method of sale, description of property, selling agency, location of property, time and place for receipt of bids, acceptable forms of bid deposits and payments, and terms and conditions (41 CFR 102-38.165) , but when to publish the notice? how?
   - SC may do not have to accept all bids, any or all bids can be rejected when advantageous to Government or public interest (41 CFR 102-38.205)
   - the item can be re-offered if all bids are rejected (41 CFR 102-38.210)
   - bid results disclosure should include only bidder(s)'s names (41 CFR 102-38.215)
