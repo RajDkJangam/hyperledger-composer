@@ -1,7 +1,8 @@
-/* companies */
+/* reimbursement */
 
-/* my reimbursement */
-
-/* my invoice */
-
-/* invoice transfer record */
+query stagingReimbursement{
+  description: "select all staging invoices to be reimbursed"
+  statement:
+    SELECT oxchains.invoice.Invoice
+      WHERE ((title == _$owner) AND (reimbursementState == "STAGING"))
+}

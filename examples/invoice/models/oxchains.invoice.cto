@@ -54,12 +54,12 @@ transaction Reimbursement {
 }
 
 transaction AcceptReimbursement {
-  --> Entity by
+  --> Entity requestBy
   --> Invoice[] invoices
 }
 
 transaction DenyReimbursement {
-  --> Entity by
+  --> Entity requestBy
   --> Invoice[] invoices
   o String reason optional
 }

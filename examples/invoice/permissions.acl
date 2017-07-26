@@ -1,40 +1,129 @@
-rule PayProductListingForbidRule {
+rule PayProductListingRule {
   description: "cannot buy from oneself, seller and title cannot be the same entity"
   participant: "ANY"
   operation: CREATE
   resource(tx): "oxchains.invoice.PayProductListing"
-  condition: (
-    tx.buyer.getIdentifier() == tx.seller.entity.getIdentifier()
-    || tx.seller.getIdentifier() == tx.invoiceTitle.getIdentifier()
+  condition: ( 
+    tx.buyer.getIdentifier() != tx.seller.entity.getIdentifier()
+    && tx.seller.getIdentifier() != tx.invoiceTitle.getIdentifier()
   )
-  action: DENY
-}
-
-rule InvoiceTransferForbidRule {
-  description: "cannot transfer invoice to oneself, cannot transfer staging invoices, cannot transfer others' invoices"
-  participant(m): "ANY"
-  operation: CREATE
-  resource(tx): "oxchains.invoice.InvoiceTransfer"
-  condition: (!(
-    (!!m.entity && m.entity.getIdentifier() == tx.to.getIdentifier())
-    || m.getIdentifier() == tx.to.getIdentifier()
-    || tx.invoices.some(function(i){return i.reimbursementState == "STAGING";})
-    || (
-        !!m.entity && tx.invoices.some(function(i){return i.owner.getIdentifier() != m.entity.getIdentifier();})
-        || tx.invoices.some(function(i){return i.owner.getIdentifier() != m.getIdentifier();})
-       )
-  ))
   action: ALLOW
 }
 
-rule InvoiceReimburseForbidRule {
-  description: "Description of the Transactional ACL rule"
+rule PayProductListingUpdateEntityRule {
+  description: "buyer could update balance via tx"
+  participant: "oxchains.invoice.Entity"
+  operation: UPDATE
+  resource: "oxchains.invoice.Entity"
+  transaction: "oxchains.invoice.PayProductListing"
+  action: ALLOW
+}
+
+rule PayProductListingCreateInvoiceRule {
+  description: "buyer could issue invoice via tx"
+  participant: "oxchains.invoice.Entity"
+  operation: CREATE
+  resource: "oxchains.invoice.Invoice"
+  transaction: "oxchains.invoice.PayProductListing"
+  action: ALLOW
+}
+
+rule InvoiceTransferFromCompanyRule {
+  description: "cannot transfer invoice to oneself, cannot transfer staging invoices, cannot transfer others' invoices"
+  participant(m): "oxchains.invoice.Company"
+  operation: CREATE
+  resource(tx): "oxchains.invoice.InvoiceTransfer"
+  condition: ( m.entity.getIdentifier() != tx.to.getIdentifier() )
+  action: ALLOW
+}
+
+rule InvoiceTransferFromEntityRule {
+  description: "cannot transfer invoice to oneself, cannot transfer staging invoices, cannot transfer others' invoices"
+  participant(m): "oxchains.invoice.Entity"
+  operation: CREATE
+  resource(tx): "oxchains.invoice.InvoiceTransfer"
+  condition: ( m.getIdentifier() != tx.to.getIdentifier() )
+  action: ALLOW
+}
+
+rule InvoiceTransferUpdateRule {
+  description: "invoice owner can reassign it to others"
+  participant: "ANY"
+  operation: UPDATE
+  resource: "oxchains.invoice.Invoice"
+  transaction: "oxchains.invoice.InvoiceTransfer"
+  action: ALLOW
+}
+
+rule InvoiceReimburseRule {
+  description: "cannot reimburse invoices of others"
   participant: "ANY"
   operation: CREATE
   resource(tx): "oxchains.invoice.Reimbursement"
-  condition: (!(
-    !!m.entity && tx.invoices.some(function(i){return i.owner.getIdentifier() != m.entity.getIdentifier();})
-    || tx.invoices.some(function(i){return i.owner.getIdentifier() != m.getIdentifier();})
-  ))
+  condition: ( tx.invoices.length >= 1 )
+  action: ALLOW
+}
+
+rule InvoiceReimbursementUpdateRule {
+  description: "invoice owner can update invoice state"
+  participant: "ANY"
+  operation: UPDATE
+  resource: "oxchains.invoice.Invoice"
+  transaction: "oxchains.invoice.Reimbursement"
+  action: ALLOW
+}
+
+rule ReadInvoiceEntityRule {
+  description: "entities only has access to invoices of their own"
+  participant(m): "oxchains.invoice.Entity"
+  operation: READ
+  resource(i): "oxchains.invoice.Invoice"
+  condition: ( m.getIdentifier() == i.owner.getIdentifier() || m.getIdentifier() == i.title.getIdentifier() )
+  action: ALLOW
+}
+
+rule ReadInvoiceCompanyRule {
+  description: "companies only has access to invoices of their own"
+  participant(m): "oxchains.invoice.Company"
+  operation: READ
+  resource(i): "oxchains.invoice.Invoice"
+  condition: (
+    m.entity.getIdentifier() == i.owner.getIdentifier()
+    || ( i.reimbursementState == "STAGING" && m.entity.getIdentifier() == i.title.getIdentifier() )
+  )
+  action: ALLOW
+}
+
+rule ReadEntityRule {
+  description: "anyone can view all entities"
+  participant: "oxchains.invoice.Entity"
+  operation: READ
+  resource: "oxchains.invoice.Entity"
+  action: ALLOW
+}
+
+rule ReadCompanyRule {
+  description: "anyone can view all companies"
+  participant: "oxchains.invoice.Entity"
+  operation: READ
+  resource: "oxchains.invoice.Company"
+  action: ALLOW
+}
+
+rule ReadReimbursementAcceptanceRule {
+  description: "anyone requesting reimbursement can view related transactions"
+  participant(m): "oxchains.invoice.Entity"
+  operation: READ
+  resource(r): "oxchains.invoice.AcceptReimbursement"
+  condition: ( m.getIdentifier() == r.requestBy.getIdentifier() )
+  action: ALLOW
+}
+
+rule ReadReimbursementDenialRule {
+  description: "anyone requesting reimbursement can view related transactions"
+  participant(m): "oxchains.invoice.Entity"
+  operation: READ
+  resource(r): "oxchains.invoice.DenyReimbursement"
+  condition: ( m.getIdentifier() == r.requestBy.getIdentifier() )
   action: ALLOW
 }
