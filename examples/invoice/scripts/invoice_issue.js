@@ -17,14 +17,15 @@ function payProductListing(payTx) {
         .then(function (pr) {
             /* assume buyer has enough balance to cover the amount of listings */
             buyer.balance -= total;
-            return pr.update(buyer);
-        }).then(function () {
-            return getParticipantRegistry("oxchains.invoice.Entity");
-        }).then(function (pr) {
-            payTx.seller.entity.balance += total;
-            return pr.update(payTx.seller.entity);
-        }).then(function () {
-            return getAssetRegistry("oxchains.invoice.Invoice");
+            return pr.update(buyer).then(function() {
+                return pr.get(payTx.seller.entity.getIdentifier())
+                    .then(function(sellerEntity) {
+                        sellerEntity.balance += total;
+                        return pr.update(sellerEntity);
+                    });
+            }).then(function() {
+                return getAssetRegistry("oxchains.invoice.Invoice");
+            });
         }).then(function (ar) {
             var invoice = getFactory().newResource("oxchains.invoice", "Invoice", "EI-" + Math.floor(Math.random() * 7000 + Date.now()));
             invoice.title = payTx.invoiceTitle;

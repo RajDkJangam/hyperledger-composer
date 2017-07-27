@@ -13,7 +13,7 @@ rule PayProductListingRule {
 rule PayProductListingUpdateEntityRule {
   description: "buyer could update balance via tx"
   participant: "oxchains.invoice.Entity"
-  operation: UPDATE
+  operation: READ, UPDATE
   resource: "oxchains.invoice.Entity"
   transaction: "oxchains.invoice.PayProductListing"
   action: ALLOW
@@ -56,7 +56,7 @@ rule InvoiceTransferUpdateRule {
 }
 
 rule InvoiceReimburseRule {
-  description: "cannot reimburse invoices of others"
+  description: "requested invoices cannot be empty"
   participant: "ANY"
   operation: CREATE
   resource(tx): "oxchains.invoice.Reimbursement"
@@ -78,7 +78,7 @@ rule ReadInvoiceEntityRule {
   participant(m): "oxchains.invoice.Entity"
   operation: READ
   resource(i): "oxchains.invoice.Invoice"
-  condition: ( m.getIdentifier() == i.owner.getIdentifier() || m.getIdentifier() == i.title.getIdentifier() )
+  condition: ( m.getIdentifier() == i.owner.getIdentifier() || m.getIdentifier() == i.title.entity.getIdentifier() )
   action: ALLOW
 }
 
@@ -89,22 +89,90 @@ rule ReadInvoiceCompanyRule {
   resource(i): "oxchains.invoice.Invoice"
   condition: (
     m.entity.getIdentifier() == i.owner.getIdentifier()
-    || ( i.reimbursementState == "STAGING" && m.entity.getIdentifier() == i.title.getIdentifier() )
+    || ( i.reimbursementState == "STAGING" && m.getIdentifier() == i.title.getIdentifier() )
   )
   action: ALLOW
 }
 
-rule ReadEntityRule {
-  description: "anyone can view all entities"
-  participant: "oxchains.invoice.Entity"
+rule ReimbursementAccceptanceRule {
+  description: "requested invoices cannot be empty"
+  participant: "ANY"
+  operation: CREATE
+  resource(tx): "oxchains.invoice.AcceptReimbursement"
+  condition: ( tx.invoices.length >= 1 )
+  action: ALLOW
+}
+
+rule ReimbursementAccceptanceEntityRule {
+  description: "company only allowed to update entity on transaction"
+  participant(m): "oxchains.invoice.Company"
+  operation: READ, UPDATE
+  resource(r): "oxchains.invoice.Entity"
+  transaction(tx): "oxchains.invoice.AcceptReimbursement"
+  condition: (tx.requestBy.getIdentifier() == r.getIdentifier() || m.entity.getIdentifier() == r.getIdentifier() )
+  action: ALLOW
+}
+
+rule ReimbursementAccceptanceUpdateRule {
+  description: "company only allowed to update invoice with its title"
+  participant(m): "oxchains.invoice.Company"
+  operation: UPDATE
+  resource(r): "oxchains.invoice.Invoice"
+  transaction(tx): "oxchains.invoice.AcceptReimbursement"
+  condition: ( m.getIdentifier() == r.title.getIdentifier() )
+  action: ALLOW
+}
+
+rule ReimbursementRejectionRule {
+  description: "requested invoices cannot be empty"
+  participant: "ANY"
+  operation: CREATE
+  resource(tx): "oxchains.invoice.RejectReimbursement"
+  condition: ( tx.invoices.length >= 1 )
+  action: ALLOW
+}
+
+rule ReimbursementRejectionReadRule {
+  description: "company only allowed to read entity on transaction"
+  participant: "oxchains.invoice.Company"
   operation: READ
-  resource: "oxchains.invoice.Entity"
+  resource(r): "oxchains.invoice.Entity"
+  transaction(tx): "oxchains.invoice.RejectReimbursement"
+  condition: (tx.requestBy.getIdentifier() == r.getIdentifier() )
+  action: ALLOW
+}
+
+rule ReimbursementRejectionUpdateRule {
+  description: "company only allowed to update invoice with its title"
+  participant(m): "oxchains.invoice.Company"
+  operation: UPDATE
+  resource(r): "oxchains.invoice.Invoice"
+  transaction: "oxchains.invoice.RejectReimbursement"
+  condition: ( m.getIdentifier() == r.title.getIdentifier() )
+  action: ALLOW
+}
+
+rule ReadEntityRule {
+  description: "anyone can view themselves"
+  participant(m): "oxchains.invoice.Entity"
+  operation: READ
+  resource(r): "oxchains.invoice.Entity"
+  condition: ( m.getIdentifier() == r.getIdentifier() )
+  action: ALLOW
+}
+
+rule CompanyReadEntityRule {
+  description: "company can view its own entity"
+  participant(m): "oxchains.invoice.Company"
+  operation: READ
+  resource(r): "oxchains.invoice.Entity"
+  condition: (m.entity.getIdentifier() == r.getIdentifier())
   action: ALLOW
 }
 
 rule ReadCompanyRule {
   description: "anyone can view all companies"
-  participant: "oxchains.invoice.Entity"
+  participant: "ANY"
   operation: READ
   resource: "oxchains.invoice.Company"
   action: ALLOW
@@ -119,11 +187,19 @@ rule ReadReimbursementAcceptanceRule {
   action: ALLOW
 }
 
-rule ReadReimbursementDenialRule {
+rule ReadReimbursementRejectionRule {
   description: "anyone requesting reimbursement can view related transactions"
   participant(m): "oxchains.invoice.Entity"
   operation: READ
-  resource(r): "oxchains.invoice.DenyReimbursement"
+  resource(r): "oxchains.invoice.RejectReimbursement"
   condition: ( m.getIdentifier() == r.requestBy.getIdentifier() )
+  action: ALLOW
+}
+
+rule HyperLedgerNetworkReadRule {
+  description: "Description of the Conditional ACL rule"
+  participant: "ANY"
+  operation: READ
+  resource: "org.hyperledger.composer.system.*"
   action: ALLOW
 }

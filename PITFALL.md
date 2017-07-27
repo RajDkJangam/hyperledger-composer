@@ -32,3 +32,54 @@ rule EntityRule {
   action: ALLOW
 }
 ```
+
+## Transaction Logic
+
+- cannot declare utility function below transaction handler
+
+```javascript
+/**
+ * transaction handler
+ * @param {sample.Transaction} tx 
+ * @transaction
+ */
+function txHandler(tx) {
+    //do something
+    return "";
+}
+
+function utility(param) {
+    //param will be evaluated when executing txHandler, param will be a resolved transaction
+    return "";
+}
+```
+
+- cannot update resource via a relationship
+
+```javascript
+//model.cto
+model Entity identified by id{
+  o String id
+  o Long balance
+}
+
+model Group identified by id{
+  o String id
+  --> Entity entity
+}
+
+//transaction.script
+/**
+ * balance transfer
+ * @param {sample.TransferBalance} tbTx 
+ * @transaction
+ */
+function txHandler(tbTx) {
+    tbTx.group.entity.balance += tbTx.amount;
+    return getParticipantRegistry("sample.Group")
+        .then(function(pr) {
+            //this would fail because group.entity is an relationship
+            return pr.update(tbTx.group.entity);
+        });
+}
+```

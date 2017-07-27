@@ -30,7 +30,7 @@ concept ProductListing {
 
 asset Invoice identified by eid {
   o String eid
-  --> Entity title 
+  --> Company title 
   --> Company by
   --> Entity owner
   o ProductListing[] productListings
@@ -40,7 +40,7 @@ asset Invoice identified by eid {
 transaction PayProductListing {
   --> Entity buyer
   --> Company seller
-  --> Entity invoiceTitle
+  --> Company invoiceTitle
   o ProductListing[] productListings
 }
 
@@ -58,8 +58,18 @@ transaction AcceptReimbursement {
   --> Invoice[] invoices
 }
 
-transaction DenyReimbursement {
+transaction RejectReimbursement {
   --> Entity requestBy
   --> Invoice[] invoices
   o String reason optional
+}
+
+event ReimbursementAcceptedEvent{
+  --> Entity owner
+  o String[] invoices
+}
+
+event ReimbursementRejectedEvent {
+  --> Entity owner
+  o String[] invoices
 }
