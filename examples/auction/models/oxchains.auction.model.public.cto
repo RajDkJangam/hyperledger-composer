@@ -1,6 +1,6 @@
 namespace oxchains.auction.model.public
 
-concept User {
+abstract participant User {
   o String name
 }
 

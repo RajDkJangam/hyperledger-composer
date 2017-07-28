@@ -83,3 +83,28 @@ function txHandler(tbTx) {
         });
 }
 ```
+
+- `composer-cli archive create` does not support cross namespace concept import
+
+the following models cannot be packaged:
+
+```javascript
+//model/a.cto
+namespace auction.model.public
+
+/* package would be viable if we change 'concept' to 'abstract participant' or 'participant' */
+concept User {
+  o String name
+}
+
+participant Auctioneer identified by aid extends User {
+  o String aid
+}
+
+//model/b.cto
+namespace auction.model.private
+
+participant Member identified by mid extends User {
+  o String mid
+}
+```
