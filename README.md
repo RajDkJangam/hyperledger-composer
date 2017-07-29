@@ -20,3 +20,7 @@ on [hyperledger composer](https://github.com/hyperledger/composer)
 
 ## Hyperledger Fabric Deployment
 
+1. use configtxgen to generate a channel genesis file: `configtxgen -profile {GenesisProfile} -outputCreateChannelTx composerchannel.tx -channelID composerchannel`
+2. create channel `composerchannel` with orderer
+3. peer {composer-peer} join channel `composerchannel`
+4. deploy network archive: `composer network deploy -a {networkArchive.bna} -p {connectionProfile} -i {adminId} -s {adminSecret}`
