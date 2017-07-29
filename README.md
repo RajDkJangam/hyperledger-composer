@@ -15,3 +15,8 @@ on [hyperledger composer](https://github.com/hyperledger/composer)
 4. start up `composer-playground-api` package: `node composer/packages/composer-playground-api/cli.js`
 5. build `composer-playground`: `env PLAYGROUND_API=http://localhost:15699 npm run build` (we can change playground api address via process environment variable)
 6. start up `composer-playground`: `node composer/packages/composer-playground/cli.js`
+7. package the examples: `composer archive create -a dist/{name}-network.bna --sourceType dir --sourceName .`
+8. import the `bna` file into playground
+
+## Hyperledger Fabric Deployment
+
