@@ -20,7 +20,11 @@ on [hyperledger composer](https://github.com/hyperledger/composer)
 
 ## Hyperledger Fabric Deployment
 
+**ensure that identity pub/priv keys used in composer profile credentials and fabric orderer/peer/client are identical**
+
 1. use configtxgen to generate a channel genesis file: `configtxgen -profile {GenesisProfile} -outputCreateChannelTx composerchannel.tx -channelID composerchannel`
 2. create channel `composerchannel` with orderer
 3. peer {composer-peer} join channel `composerchannel`
-4. deploy network archive: `composer network deploy -a {networkArchive.bna} -p {connectionProfile} -i {adminId} -s {adminSecret}`
+4. deploy network archive: `composer network deploy -a {networkArchive.bna} -p {connectionProfile} -i {adminId} -s {adminSecret} -o endorsementPolicyFile={endorsementPolicy.json}`
+5. generate rest api: `composer-rest-server -p hlfv1 -i {adminId} -s {adminSecret} -N never -S false -w true -t false -n {businessNetwork}`
+6. generate angular2 app: `yo hyperledger-composer` (install yoeman generator by `npm -g i generator-hyperledger-composer`)

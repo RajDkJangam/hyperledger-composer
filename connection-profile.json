@@ -1,0 +1,22 @@
+{
+    "type": "hlfv1",
+    "orderers": [
+        {
+            "url": "grpc://localhost:7050"
+        }
+    ],
+    "ca": {
+        "url": "http://localhost:7054",
+        "name": "Org1CA"
+    },
+    "peers": [
+        {
+            "requestURL": "grpc://localhost:7056",
+            "eventURL": "grpc://localhost:7058"
+        }
+    ],
+    "keyValStore": "${HOME}/.composer-credentials",
+    "channel": "composerchannel",
+    "mspID": "Org1MSP",
+    "timeout": "300"
+}

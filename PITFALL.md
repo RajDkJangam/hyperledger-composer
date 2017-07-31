@@ -108,3 +108,31 @@ participant Member identified by mid extends User {
   o String mid
 }
 ```
+
+## Deployment
+
+### Errors
+
+- "identity is not an admin"
+
+```
+Error: Error trying deploy. Error: Error trying install chaincode. Error: chaincode error (status: 500, message: Authorization for INSTALL has been denied (error-Failed verifying that proposal's creator satisfies local MSP principal during channelless check policy with policy [Admins]: [This identity is not an admin]))
+```
+
+Replace `admincerts` of peer with the admin's certificate.
+
+- "authorization Failure" 
+
+```
+Error: Error trying login and get user Context. Error: Error trying to enroll user. Error: Enrollment failed with errors [[{"code":400,"message":"Authorization failure"}]]
+```
+
+enrollment id/secret does not match
+
+- "failed to authenticate policy"
+
+```
+Error: Error trying deploy. Error: Error trying to instantiate chaincode. Error: chaincode error (status: 500, message: chaincode instantiation policy violated(Failed to authenticate policy))
+```
+
+endorsement policy error: related to `signed-by` and `identity`/`msp` of organization members configured in composer, peers, orderers and channels.

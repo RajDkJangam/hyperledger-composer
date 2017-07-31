@@ -1,0 +1,15 @@
+{
+  "identities": [{
+    "role": {
+      "name": "admin",
+      "mspId": "Org1MSP"
+    },
+    "OrganizationUnit": "Org1",
+    "Identity": "hlfcomposer"
+  }],
+  "policy": {
+    "1-of": [{
+      "signed-by": 0
+    }]
+  }
+}
