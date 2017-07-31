@@ -1,0 +1,3 @@
+[submodule "examples/invoice/compiled/src/composer/vendor/gopkg.in/olebedev/go-duktape"]
+	path = examples/invoice/compiled/src/composer/vendor/gopkg.in/olebedev/go-duktape
+	url = https://github.com/olebedev/go-duktape

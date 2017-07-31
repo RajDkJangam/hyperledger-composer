@@ -9,6 +9,8 @@ on [hyperledger composer](https://github.com/hyperledger/composer)
 
 ## Local Playground Setup
 
+_we can skip step 7 can import files one by one into playground_
+
 1. clone composer: `git clone https://github.com/hyperledger/composer`
 2. bootstrap dependencies: `lerna bootstrap`
 3. init submodules of `composer-playground` package: `git submodule && git submodule update`
@@ -20,7 +22,7 @@ on [hyperledger composer](https://github.com/hyperledger/composer)
 
 ## Hyperledger Fabric Deployment
 
-**ensure that identity pub/priv keys used in composer profile credentials and fabric orderer/peer/client are identical**
+**ensure that identity pub/priv keys used in composer profile credentials and fabric (orderer/peer/client)'s admincerts are identical**
 
 1. use configtxgen to generate a channel genesis file: `configtxgen -profile {GenesisProfile} -outputCreateChannelTx composerchannel.tx -channelID composerchannel`
 2. create channel `composerchannel` with orderer
