@@ -2,6 +2,8 @@
 
 by _Jeniffer Bondarchuk, Alexis Serra, Colbert Zhu_
 
+## Strategy
+
 a online voting system based on bitcoin-alike system
 
 - registration
@@ -18,3 +20,9 @@ a online voting system based on bitcoin-alike system
   2. votes counted by number of transactions, not the final amount of bitcoins within the candidates' address
   3. if voter's bitcoin is sent to more than one candidates, the vote will be discounted
   4. the full ledger will be released to public and each voter can verify their votes and the final count
+
+
+## Risk
+
+1. what if government mock voters?
+2. what if voter's information got stolen?
